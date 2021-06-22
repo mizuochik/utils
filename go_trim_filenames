@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -eu
+
+trim_filename() {
+        local orig=$1
+        local is_t=false
+        local is_m=false
+        [[ $orig = *_test.go ]] && is_t=true
+        [[ $orig = *_mock.go ]] && is_m=true
+        out=$(echo -n "$orig" | sed 's/_test\.go$/.go/' | sed 's/_mock\.go$/.go/' | tr -d _)
+        $is_t && out=$(echo -n "$out" | sed 's/\.go$/_test.go/')
+        $is_m && out=$(echo -n "$out" | sed 's/\.go$/_mock.go/')
+        echo -n "$out"
+}
+
+main() {
+        root=$1
+        find "$root" -name *.go | while read f 
+        do
+                mv "$f" "$(trim_filename $f)"
+        done
+}
+
+main $@
