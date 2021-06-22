@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -eu
+
+. ./go_trim_filenames.sh
+
+want=foobar.go
+got=$(trim_filename foo_bar.go)
+[[ $want = $got ]] || echo "want: $want, got: $got" && exit 1
+
+want=foobar_test.go
+got=$(trim_filename foo_bar_test.go)
+[[ $want = $got ]] || echo "want: $want, got: $got" && exit 1
+
+want=foobar_mock.go
+got=$(trim_filename foo_bar_mock.go)
+[[ $want = $got ]] || echo "want: $want, got: $got" && exit 1
